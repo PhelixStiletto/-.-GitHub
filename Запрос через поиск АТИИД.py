@@ -40,31 +40,30 @@ try:
     driver.get("https://loads.ati.su/orders/cargoOwner/reports")
     print("Страница отчётов открыта.")
 
-    # Ввод логина и пароля и вход
+    # Вход на сайт
     login_xpath = "/html/body/div[4]/div/div[1]/div[2]/div/div[2]/div/div[1]/div[4]/input"
     password_xpath = "/html/body/div[4]/div/div[1]/div[2]/div/div[2]/div/div[1]/div[5]/input"
     submit_xpath = "/html/body/div[4]/div/div[1]/div[2]/div/div[2]/div/div[2]/div[1]/button"
+    
 
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, login_xpath))).send_keys(USERNAME)
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, password_xpath))).send_keys(PASSWORD)
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, submit_xpath))).click()
+    # Ввод логина
+    login_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, login_xpath)))
+    login_field.send_keys(USERNAME)
+    print("Логин введён.")
+
+    # Ввод пароля
+    password_field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, password_xpath)))
+    password_field.send_keys(PASSWORD)
+    print("Пароль введён.")
+
+    # Нажатие кнопки 'Войти'
+    submit_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, submit_xpath)))
+    submit_button.click()
+    print("Кнопка 'Войти' нажата.")
+
+    # Ожидание загрузки после входа
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
     print("Вход выполнен успешно.")
-
-    # Нажимаем на кнопку "Скачать отчёт"
-    button_download_xpath = "/html/body/div[3]/div[2]/div/div[1]/div[2]/div[3]/div[3]/div/div/button"
-    button_download = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, button_download_xpath)))
-    button_download.click()
-    print("Кнопка 'Скачать отчёт' нажата.")
-
-    # Нажимаем на кнопку скачивания CSV-отчёта
-    button_csv_xpath = "/html/body/div[3]/div[2]/div/div[1]/div[2]/div[3]/div[3]/div/div/div/div/button[1]"
-    button_csv = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, button_csv_xpath)))
-    button_csv.click()
-    print("Отчёт в формате CSV загружается...")
-
-    # Ожидание завершения загрузки отчёта
-    time.sleep(10)
-    print("Отчёт успешно загружен в формате CSV.")
 
 except Exception as e:
     print("Произошла ошибка:", e)
